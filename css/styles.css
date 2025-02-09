@@ -79,6 +79,27 @@
   --bs-highlight-bg: #fff3cd;
 }
 
+.floating-radio {
+  position: relative;
+  padding-top: 3rem; /* Space for floating label */
+}
+
+.floating-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 22px;
+  color: #6c757d; /* Bootstrap gray */
+  transition: all 0.2s;
+}
+
+.floating-radio:focus-within .floating-label,
+.floating-radio:hover .floating-label {
+    font-size: 15px;
+    top: -10px;
+    color: #6c757d; /* Bootstrap primary gray */
+}
+
 .spinner {
   width: 30px;
   height: 30px;
