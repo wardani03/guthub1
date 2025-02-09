@@ -160,15 +160,17 @@
                 <!-- Contact Section Form-->
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-xl-7">
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- * * SB Forms Contact Form * *-->
-                        <!-- * * * * * * * * * * * * * * *-->
-                        <!-- This form is pre-integrated with SB Forms.-->
-                        <!-- To make this form functional, sign up at-->
-                        <!-- https://startbootstrap.com/solution/contact-forms-->
-                        <!-- to get an API token!-->
-                        <form method="post" action="" id="contactForm" data-sb-form-api-token="API_TOKEN">
-                            <!-- Name input-->
+                        <form method="post" action="" id="contactForm">
+                            <!-- Custom Loading Spinner -->
+                            <div id="loadingSpinner" style="display: none; text-align: center; margin-top: 10px;">
+                                <div class="spinner"></div>
+                                <p>Submitting...</p>
+                            </div>
+                            <!-- Custom Alerts -->
+                            <div id="customAlert" class="alert" style="display: none;">
+                                <p id="alertMessage"></p>
+                            </div>
+                            
                             <div class="form-floating mb-3">
                                 <input class="form-control" name="Nama" type="text" placeholder="Masukan nama lengkap anda..." data-sb-validations="required" />
                                 <label for="nama">Nama Lengkap</label>
@@ -194,43 +196,6 @@
                                 <label for="noHp">No HP.</label>
                                 <div class="invalid-feedback" data-sb-feedback="noHp:required">No HP harus di isi.</div>
                             </div>
-                            <!-- Email address input-->
-                            <!-- <div class="form-floating mb-3">
-                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
-                                <label for="email">Email address</label>
-                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
-                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
-                            </div> -->
-                            <!-- Phone number input-->
-                            <!-- <div class="form-floating mb-3">
-                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
-                                <label for="phone">Phone number</label>
-                                <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
-                            </div> -->
-                            <!-- Message input-->
-                            <!-- <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
-                                <label for="message">Message</label>
-                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
-                            </div> -->
-                            <!-- Submit success message-->
-                            <!---->
-                            <!-- This is what your users will see when the form-->
-                            <!-- has successfully submitted-->
-                            <!-- <div class="d-none" id="submitSuccessMessage">
-                                <div class="text-center mb-3">
-                                    <div class="fw-bolder">Form submission successful!</div>
-                                    To activate this form, sign up at
-                                    <br />
-                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                                </div>
-                            </div> -->
-                            <!-- Submit error message-->
-                            <!---->
-                            <!-- This is what your users will see when there is-->
-                            <!-- an error submitting the form-->
-                            <!-- <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div> -->
-                            <!-- Submit Button-->
                             <button class="btn btn-primary btn-xl" id="submitButton" value="Submit" type="submit">Send</button>
                         </form>
                     </div>
@@ -482,11 +447,43 @@
       
                 const scriptURL = 'https://script.google.com/macros/s/AKfycbyE_xKs_R6Fi90Pk98chDkN_0QGQrxH-0vyDzcOHDKOODUiqv07BJr6_Se4ZG_MurTx/exec'
                 const form = document.forms['contactForm']
+                const submitButton = document.querySelector("#contactForm button[type='submit']");
+                const loadingSpinner = document.getElementById("loadingSpinner");
+                const alertBox = document.getElementById("customAlert");
+                const alertMessage = document.getElementById("alertMessage");
+
                 
-                fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-                    .then(response => alert("Thank you! Form is submitted" ))
-                    .then(() => { window.location.reload(); })
-                    .catch(error => console.error('Error!', error.message))
+                // Disable button and show loading animation
+                submitButton.disabled = true;
+                loadingSpinner.style.display = "block";
+
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => {
+                    showAlert("success", "✅ Thank you! Your form has been submitted.");
+                    form.reset();
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    showAlert("error", "❌ Something went wrong. Please try again.");
+                })
+                .finally(() => {
+                    // Re-enable button and hide loading animation
+                    submitButton.disabled = false;
+                    loadingSpinner.style.display = "none";
+                });
+
+                // Function to show custom alert
+                function showAlert(type, message) {
+                    alertMessage.innerHTML = message;
+                    alertBox.style.display = "block";
+                    alertBox.classList.remove("success", "error");
+                    alertBox.classList.add(type);
+
+                    // Auto-hide alert after 3 seconds
+                    setTimeout(() => {
+                        alertBox.style.display = "none";
+                    }, 3000);
+                }
  
             });
         </script>

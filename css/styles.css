@@ -79,6 +79,45 @@
   --bs-highlight-bg: #fff3cd;
 }
 
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Custom Alert Styles */
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 20px;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 1000;
+  display: none;
+  min-width: 250px;
+}
+
+.success {
+  background-color: #28a745;
+}
+
+.error {
+  background-color: #dc3545;
+}
+
 *,
 *::before,
 *::after {
